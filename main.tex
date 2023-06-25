@@ -1,0 +1,580 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amsmath}
+
+\usepackage{circuitikz}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\usetikzlibrary{arrows}
+\usepackage{amssymb}
+\title{Google Matrix}
+\author{adrian.ariton0 }
+\date{June 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\subsection{Power Method}
+
+    \textbf{eigenvector.m}
+\lstset{frame=tb,
+  language=Octave,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+    \begin{lstlisting}
+    function retval = eigenvector (stochastic_matrix, precision)
+      n = size(stochastic_matrix,1);
+      tol = 10 ^ (-precision);
+      output_precision(precision);
+      vector = ones(n, 1) * 1 / n;
+      old_vector = zeros(n, 1);
+      iter = 1;
+    
+      while norm(old_vector - vector) > tol
+        old_vector = vector;
+        printf("A ^ %d * ", iter)
+        vector = stochastic_matrix * vector
+        iter = iter + 1;
+        norm(old_vector - vector);
+      endwhile
+    
+      printf("\n-------------------------");
+      printf("\nStabilized on %dth iteration\n", iter-1);
+    
+      retval = vector;
+    endfunction
+    \end{lstlisting}  
+    \subsection{Directed Link Graph}
+    \begin{center}
+    \begin{tikzpicture}
+    
+    \tikzset{vertex/.style = {shape=circle,draw,minimum size=1.5em}}
+    \tikzset{edge/.style = {->,> = latex'}}
+    % vertices
+    \node[vertex,minimum size=1cm] (5) at  (0,0) {$5$};
+    \node[vertex,minimum size=0.3cm] (1) at  (0,6) {$1$};
+    \node[vertex,minimum size=1cm] (2) at  (5,8) {$2$};
+    \node[vertex,minimum size=2cm] (4) at  (5,-2) {$4$};
+    \node[vertex,minimum size=0.2cm] (3) at (9, 3) {$3$};
+    %edges
+
+    
+    \draw[edge] (1)  to (2);
+    \draw[edge] (2)  to[bend left] (4);
+    \draw[edge] (1)  to (4);
+
+    \draw[edge] (4)  to[bend left] (2);
+    \draw[edge] (3)  to (4);
+
+        
+    \draw[edge] (4)  to (5);
+    \draw[edge] (3)  to (5);
+    \draw[edge] (5)  to (1);
+    
+    \end{tikzpicture}
+    \end{center}
+    $$A = \begin{bmatrix}0 & 0 & 0 & 0 & 1 \\ \frac{1}{3} & 0 & 0 & \frac{1}{2} & 0 \\ \frac{1}{3} & 0 & 0 & 0& 0\\ \frac{1}{3} & 1 & \frac{1}{2} & 0 & 0\\ 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0\end{bmatrix}$$
+
+
+        $$v = \begin{bmatrix}
+0.2\\
+0.2\\
+0.2\\
+0.2\\
+0.2\\
+\end{bmatrix}
+$$
+
+    $$A^{1} \cdot v = \begin{bmatrix}
+0.2\\
+0.166666666666667\\
+0.0666666666666667\\
+0.366666666666667\\
+0.2
+\end{bmatrix}
+$$
+
+$$A^{2} \cdot v = \begin{bmatrix}
+0.2\\
+0.25\\
+0.0666666666666667\\
+0.266666666666667\\
+0.216666666666667
+\end{bmatrix}
+$$
+
+$$A^{3} \cdot v = \begin{bmatrix}
+0.216666666666667\\
+0.2\\
+0.0666666666666667\\
+0.35\\
+0.166666666666667
+\end{bmatrix}
+$$
+
+$$A^{4} \cdot v = \begin{bmatrix}
+0.166666666666667\\
+0.247222222222222\\
+0.0722222222222222\\
+0.305555555555556\\
+0.208333333333333
+\end{bmatrix}
+$$
+
+$$A^{5} \cdot v = \begin{bmatrix}
+0.208333333333333\\
+0.208333333333333\\
+0.0555555555555556\\
+0.338888888888889\\
+0.188888888888889
+\end{bmatrix}
+$$
+
+$$A^{6} \cdot v = \begin{bmatrix}
+0.188888888888889\\
+0.238888888888889\\
+0.0694444444444444\\
+0.305555555555556\\
+0.197222222222222
+\end{bmatrix}
+$$
+
+$$A^{7} \cdot v = \begin{bmatrix}
+0.197222222222222\\
+0.215740740740741\\
+0.062962962962963\\
+0.336574074074074\\
+0.1875
+\end{bmatrix}
+$$
+
+$$A^{8} \cdot v = \begin{bmatrix}
+0.1875\\
+0.234027777777778\\
+0.0657407407407407\\
+0.312962962962963\\
+0.199768518518518
+\end{bmatrix}
+$$
+
+$$A^{9} \cdot v = \begin{bmatrix}
+0.199768518518518\\
+0.218981481481481\\
+0.0625\\
+0.329398148148148\\
+0.189351851851852
+\end{bmatrix}
+$$
+
+$$A^{10} \cdot v = \begin{bmatrix}
+0.189351851851852\\
+0.231288580246914\\
+0.0665895061728395\\
+0.316820987654321\\
+0.195949074074074
+\end{bmatrix}
+$$
+
+$$A^{11} \cdot v = \begin{bmatrix}
+0.195949074074074\\
+0.221527777777778\\
+0.0631172839506173\\
+0.327700617283951\\
+0.19170524691358
+\end{bmatrix}
+$$
+
+$$A^{12} \cdot v = \begin{bmatrix}
+0.19170524691358\\
+0.229166666666667\\
+0.0653163580246914\\
+0.318402777777778\\
+0.195408950617284
+\end{bmatrix}
+$$
+
+$$A^{13} \cdot v = \begin{bmatrix}
+0.195408950617284\\
+0.223103137860082\\
+0.0639017489711934\\
+0.325726594650206\\
+0.191859567901235
+\end{bmatrix}
+$$
+
+$$A^{14} \cdot v = \begin{bmatrix}
+0.191859567901235\\
+0.227999614197531\\
+0.065136316872428\\
+0.320190329218107\\
+0.1948141718107
+\end{bmatrix}
+$$
+
+$$A^{15} \cdot v = \begin{bmatrix}
+0.1948141718107\\
+0.224048353909465\\
+0.0639531893004115\\
+0.324520961934156\\
+0.192663323045267
+\end{bmatrix}
+$$
+
+$$A^{16} \cdot v = \begin{bmatrix}
+0.192663323045267\\
+0.227198538237311\\
+0.0649380572702332\\
+0.320963005829904\\
+0.194237075617284
+\end{bmatrix}
+$$
+
+$$A^{17} \cdot v = \begin{bmatrix}
+0.194237075617284\\
+0.224702610596708\\
+0.0642211076817558\\
+0.323888674554184\\
+0.192950531550069
+\end{bmatrix}
+$$
+
+$$A^{18} \cdot v = \begin{bmatrix}
+0.192950531550069\\
+0.22669002914952\\
+0.064745691872428\\
+0.321558856310014\\
+0.19405489111797
+\end{bmatrix}
+$$
+
+$$A^{19} \cdot v = \begin{bmatrix}
+0.19405489111797\\
+0.22509627200503\\
+0.0643168438500228\\
+0.323379718935757\\
+0.193152274091221
+\end{bmatrix}
+$$
+
+$$A^{20} \cdot v = \begin{bmatrix}
+0.193152274091221\\
+0.226374823173868\\
+0.0646849637059899\\
+0.321939657636031\\
+0.19384828139289
+\end{bmatrix}
+$$
+
+$$A^{21} \cdot v = \begin{bmatrix}
+0.19384828139289\\
+0.225353920181756\\
+0.0643840913637403\\
+0.323101396390603\\
+0.19331231067101
+\end{bmatrix}
+$$
+
+$$A^{22} \cdot v = \begin{bmatrix}
+0.19331231067101\\
+0.226166791992932\\
+0.0646160937976299\\
+0.322162059661256\\
+0.193742743877172
+\end{bmatrix}
+$$
+
+$$A^{23} \cdot v = \begin{bmatrix}
+0.193742743877172\\
+0.225518466720965\\
+0.0644374368903368\\
+0.322912275782083\\
+0.193389076729443
+\end{bmatrix}
+$$
+
+$$A^{24} \cdot v = \begin{bmatrix}
+0.193389076729443\\
+0.226037052516766\\
+0.0645809146257239\\
+0.322318099791857\\
+0.19367485633621
+\end{bmatrix}
+$$
+
+
+-------------------------\\
+Stabilized on 24th iteration
+
+
+
+
+    %%%%%%%%%%
+
+    \subsection{Undirected Link Graph}
+    \begin{center}
+    \begin{tikzpicture}
+    
+    \tikzset{vertex/.style = {shape=circle,draw,minimum size=1.5em}}
+    \tikzset{edge/.style = {->,> = latex'}}
+    % vertices
+    \node[vertex,minimum size=1cm] (5) at  (0,0) {$5$};
+    \node[vertex,minimum size=1cm] (1) at  (0,6) {$1$};
+    \node[vertex,minimum size=1cm] (2) at  (5,8) {$2$};
+    \node[vertex,minimum size=0.5cm] (4) at  (5,-2) {$4$};
+    \node[vertex,minimum size=1cm] (3) at (9, 3) {$3$};
+    %edges
+
+    
+    \draw[edge] (1)  to (2);
+    \draw[edge] (2)  to (1);
+    
+    \draw[edge] (2)  to (4);
+    \draw[edge] (4)  to (2);
+        
+    \draw[edge] (4)  to (5);
+    \draw[edge] (5)  to (4);
+        
+    \draw[edge] (1)  to (3);
+    \draw[edge] (3)  to (1);
+        
+    \draw[edge] (2)  to (3);
+    \draw[edge] (3)  to (2);
+        
+    \draw[edge] (5)  to (3);
+    \draw[edge] (3)  to (5);
+        
+    \draw[edge] (1)  to (5);
+    \draw[edge] (5)  to (1);
+    
+    \end{tikzpicture}
+    \end{center}
+    $$A = \begin{bmatrix}0 & \frac{1}{3} & \frac{1}{3} & 0 & \frac{1}{3} \\
+    \frac{1}{3} & 0 & \frac{1}{3} & \frac{1}{2} & 0 \\
+    \frac{1}{3} & \frac{1}{3} & 0 & 0& \frac{1}{3}\\
+    0 & \frac{1}{3} & 0 & 0 & \frac{1}{3}\\
+    \frac{1}{3} & 0 & \frac{1}{3} & \frac{1}{2} & 0\end{bmatrix}$$
+
+        $$v = \begin{bmatrix}
+0.2\\
+0.2\\
+0.2\\
+0.2\\
+0.2\\
+\end{bmatrix}
+$$
+
+    $$A^{1} \cdot v = \begin{bmatrix}
+0.2\\
+0.233333333333333\\
+0.2\\
+0.133333333333333\\
+0.233333333333333
+\end{bmatrix}
+$$
+
+$$A^{2} \cdot v = \begin{bmatrix}
+0.222222222222222\\
+0.2\\
+0.222222222222222\\
+0.155555555555556\\
+0.2
+\end{bmatrix}
+$$
+
+$$A^{3} \cdot v = \begin{bmatrix}
+0.207407407407407\\
+0.225925925925926\\
+0.207407407407407\\
+0.133333333333333\\
+0.225925925925926
+\end{bmatrix}
+$$
+
+$$A^{4} \cdot v = \begin{bmatrix}
+0.219753086419753\\
+0.204938271604938\\
+0.219753086419753\\
+0.150617283950617\\
+0.204938271604938
+\end{bmatrix}
+$$
+
+$$A^{5} \cdot v = \begin{bmatrix}
+0.209876543209877\\
+0.221810699588477\\
+0.209876543209877\\
+0.136625514403292\\
+0.221810699588477
+\end{bmatrix}
+$$
+
+$$A^{6} \cdot v = \begin{bmatrix}
+0.217832647462277\\
+0.208230452674897\\
+0.217832647462277\\
+0.147873799725652\\
+0.208230452674897
+\end{bmatrix}
+$$
+
+$$A^{7} \cdot v = \begin{bmatrix}
+0.21143118427069\\
+0.219158664837677\\
+0.21143118427069\\
+0.138820301783265\\
+0.219158664837677
+\end{bmatrix}
+$$
+
+$$A^{8} \cdot v = \begin{bmatrix}
+0.216582837982015\\
+0.210364273738759\\
+0.216582837982015\\
+0.146105776558451\\
+0.210364273738759
+\end{bmatrix}
+$$
+
+$$A^{9} \cdot v = \begin{bmatrix}
+0.212437128486511\\
+0.217441446933902\\
+0.212437128486511\\
+0.140242849159173\\
+0.217441446933902
+\end{bmatrix}
+$$
+
+$$A^{10} \cdot v = \begin{bmatrix}
+0.215773340784772\\
+0.211746176903927\\
+0.215773340784772\\
+0.144960964622602\\
+0.211746176903927
+\end{bmatrix}
+$$
+
+$$A^{11} \cdot v = \begin{bmatrix}
+0.213088564864209\\
+0.216329376167815\\
+0.213088564864209\\
+0.141164117935951\\
+0.216329376167815
+\end{bmatrix}
+$$
+
+$$A^{12} \cdot v = \begin{bmatrix}
+0.21524910573328\\
+0.212641102210782\\
+0.21524910573328\\
+0.144219584111877\\
+0.212641102210782
+\end{bmatrix}
+$$
+
+$$A^{13} \cdot v = \begin{bmatrix}
+0.213510436718281\\
+0.215609195878125\\
+0.213510436718281\\
+0.141760734807188\\
+0.215609195878125
+\end{bmatrix}
+$$
+
+$$A^{14} \cdot v = \begin{bmatrix}
+0.21490960949151\\
+0.213220658549114\\
+0.21490960949151\\
+0.14373946391875\\
+0.213220658549114
+\end{bmatrix}
+$$
+
+$$A^{15} \cdot v = \begin{bmatrix}
+0.21378364219658\\
+0.215142804953715\\
+0.21378364219658\\
+0.14214710569941\\
+0.215142804953715
+\end{bmatrix}
+$$
+
+$$A^{16} \cdot v = \begin{bmatrix}
+0.214689750701337\\
+0.213595980980758\\
+0.214689750701337\\
+0.14342853663581\\
+0.213595980980758
+\end{bmatrix}
+$$
+
+$$A^{17} \cdot v = \begin{bmatrix}
+0.213960570887618\\
+0.214840768785463\\
+0.213960570887618\\
+0.142397320653839\\
+0.214840768785463
+\end{bmatrix}
+$$
+
+$$A^{18} \cdot v = \begin{bmatrix}
+0.214547369486181\\
+0.213839040918664\\
+0.214547369486181\\
+0.143227179190309\\
+0.213839040918664
+\end{bmatrix}
+$$
+
+$$A^{19} \cdot v = \begin{bmatrix}
+0.21407515044117\\
+0.214645169252608\\
+0.21407515044117\\
+0.142559360612443\\
+0.214645169252608
+\end{bmatrix}
+$$
+
+$$A^{20} \cdot v = \begin{bmatrix}
+0.214455162982129\\
+0.213996447267001\\
+0.214455162982129\\
+0.143096779501739\\
+0.213996447267001
+\end{bmatrix}
+$$
+
+$$A^{21} \cdot v = \begin{bmatrix}
+0.214149352505377\\
+0.214518498405622\\
+0.214149352505377\\
+0.142664298178001\\
+0.214518498405622
+\end{bmatrix}
+$$
+
+
+-------------------------\\
+Stabilized on 21th iteration
+    
+\end{document}
